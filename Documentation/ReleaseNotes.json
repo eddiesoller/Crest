@@ -4357,6 +4357,10 @@
     "space-lock-stays-off": {
       "category": "fixed",
       "message": "Turning off a Space’s lock in Settings now sticks after one Touch ID or password check, instead of the lock coming back. With iCloud sync, turning a lock on or off reaches your other devices too, even where the Space is locked, without unlocking it there first. If a lock can’t change, Crest says so at the top of the window."
+    },
+    "capture-page-shortcut": {
+      "category": "new",
+      "message": "On Mac, Capture Page in the Page menu and the command palette lets you drag over part of a page to copy it as an image. Its shortcut is Command-Shift-2."
     }
   }
 }
