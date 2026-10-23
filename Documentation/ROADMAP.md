@@ -121,6 +121,7 @@ the live status for each issue.
 - [ ] [Return a pinned tab to its saved address from the mobile menu](https://github.com/pauljoda/Crest/issues/236)
 - [ ] [bug: white flash between loading screen in dark mode](https://github.com/pauljoda/Crest/issues/246)
 - [ ] [feature: have a top url bar when in fullscreen mode](https://github.com/pauljoda/Crest/issues/249)
+- [ ] [Evaluate a visual recent-tab switcher on Mac](https://github.com/pauljoda/Crest/issues/254)
 - [ ] [bug: CPU usage very high compared to Arc](https://github.com/pauljoda/Crest/issues/259)
 - [ ] [bug: Can't install a private Chrome Web Store extension](https://github.com/pauljoda/Crest/issues/263)
 - [ ] [feature: Double-click a tab to rename](https://github.com/pauljoda/Crest/issues/264)
@@ -158,7 +159,6 @@ the live status for each issue.
 - [ ] [bug: Preserve sidebar state and page state when moving a tab to another window/display](https://github.com/pauljoda/Crest/issues/477)
 - [ ] [feature: Support multiple Private Browsing windows](https://github.com/pauljoda/Crest/issues/481)
 - [ ] [bug: Cannot visit Kagi homepage (CREST_NAVIGATION_FAILED)](https://github.com/pauljoda/Crest/issues/487)
-- [ ] [bug: Shift-click in the sidebar toggles one tab instead of selecting a range](https://github.com/pauljoda/Crest/issues/519)
 - [ ] [feature: Share one extension install across chosen Spaces](https://github.com/pauljoda/Crest/issues/527)
 - [ ] [feature: Stretch pins to fill the row](https://github.com/pauljoda/Crest/issues/530)
 - [ ] [bug: can't continue onboarding when importing from Arc](https://github.com/pauljoda/Crest/issues/535)
@@ -167,7 +167,6 @@ the live status for each issue.
 - [ ] [Keep a Quick Window from another app clear of a new tab's keyboard on iPhone](https://github.com/pauljoda/Crest/issues/563)
 - [ ] [Say so when a link from another app needs a locked Space](https://github.com/pauljoda/Crest/issues/564)
 - [ ] [feature: Capture part of a page from the keyboard](https://github.com/pauljoda/Crest/issues/579)
-- [ ] [Keep a Space's lock off after switching it off in Settings](https://github.com/pauljoda/Crest/issues/618)
 - [ ] [Keep Look and Feel changes smooth while they preview live](https://github.com/pauljoda/Crest/issues/619)
 
 #### Completed
@@ -204,6 +203,7 @@ the live status for each issue.
 - [x] [Restart to Update waits for Command-Q instead of quitting on its own](https://github.com/pauljoda/Crest/issues/496) — [`3a81c9f6`](https://github.com/pauljoda/Crest/commit/3a81c9f658a42153c4d3407f78d37ea58d221551), [`9623204f`](https://github.com/pauljoda/Crest/commit/9623204f56fbf86655cc05e567a1c492b3171e8a)
 - [x] [Show the right tab title in the sidebar after a page fails to load](https://github.com/pauljoda/Crest/issues/506) — [`fbddee58`](https://github.com/pauljoda/Crest/commit/fbddee58da9df69d09256a5a1b59897018e1ac55)
 - [x] [Redesign first-launch setup as a full-screen flow with a Heraldic or Modern look](https://github.com/pauljoda/Crest/issues/515) — [`37618b0d`](https://github.com/pauljoda/Crest/commit/37618b0d4f8d9abfb19b72cf6af4774304090916)
+- [x] [bug: Shift-click in the sidebar toggles one tab instead of selecting a range](https://github.com/pauljoda/Crest/issues/519)
 - [x] [bug: The sidebar hiding animation is broken and laggy.](https://github.com/pauljoda/Crest/issues/524)
 - [x] [Adapt Crest for iPhone Duo's inner and outer displays](https://github.com/pauljoda/Crest/issues/547) — [`bc99dcd9`](https://github.com/pauljoda/Crest/commit/bc99dcd926de87af86354bd434080a02b262f656)
 - [x] [Restore the page's address after dismissing a typed address](https://github.com/pauljoda/Crest/issues/549) — [`a2303d81`](https://github.com/pauljoda/Crest/commit/a2303d8114c6749a6fca1d297e017e3b321da2fc)
@@ -214,6 +214,7 @@ the live status for each issue.
 - [x] [Update the Chromium engine to 155.0.8059.84 and distrust the compromised eMudhra CAs](https://github.com/pauljoda/Crest/issues/572) — [`d8b18cd1`](https://github.com/pauljoda/Crest/commit/d8b18cd190ea196db650fdb01888f11c0fe55cab)
 - [x] [feature: Space switcher shows all Spaces at normal sidebar width](https://github.com/pauljoda/Crest/issues/588)
 - [x] [Show what coding agents do in Crest and stop them all at once](https://github.com/pauljoda/Crest/issues/609) — [`db8c4e0e`](https://github.com/pauljoda/Crest/commit/db8c4e0ede11456a8b010dc536f318f7f6399b73)
+- [x] [Keep a Space's lock off after switching it off in Settings](https://github.com/pauljoda/Crest/issues/618) — [`0757dd90`](https://github.com/pauljoda/Crest/commit/0757dd903c6ab9a17d072699d922689857ed86e2)
 
 <!-- crest-roadmap-sync:end -->
 
