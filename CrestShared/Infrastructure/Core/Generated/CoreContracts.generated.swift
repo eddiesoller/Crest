@@ -2109,6 +2109,14 @@ struct DeleteFolder: Intent, SessionIntent, Equatable, Sendable {
     let folderID: UUID
 }
 
+struct DeleteFolderAndTabs: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let windowID: UUID
+    let spaceID: UUID
+    let folderID: UUID
+    let memberTabIDs: [UUID]
+}
+
 struct DeleteProfileData: Intent, DataDeletionIntent, Equatable, Sendable {
     let requestID: UUID
     let profileID: UUID

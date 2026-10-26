@@ -12,14 +12,15 @@ namespace CrestCore.Tests;
 /// selection, which change nothing.
 public sealed partial class BrowserContractsTests {
     /// A session whose first Space holds, in order, a pinned tab, a saved tab
-    /// in a saved folder, three open tabs of which the last two are a split,
-    /// an open tab, and an open tab in an open folder; its second Space holds
-    /// one open tab.
+    /// in a saved folder, a saved tab in a folder inside that one, three open
+    /// tabs of which the last two are a split, an open tab, and an open tab in
+    /// an open folder; its second Space holds one open tab.
     private sealed class BatchSpace {
         public Guid Space { get; } = Guid.NewGuid();
         public Guid Other { get; } = Guid.NewGuid();
         public Guid Pinned { get; } = Guid.NewGuid();
         public Guid Saved { get; } = Guid.NewGuid();
+        public Guid Nested { get; } = Guid.NewGuid();
         public Guid Open { get; } = Guid.NewGuid();
         public Guid Left { get; } = Guid.NewGuid();
         public Guid Right { get; } = Guid.NewGuid();
@@ -27,6 +28,7 @@ public sealed partial class BrowserContractsTests {
         public Guid Filed { get; } = Guid.NewGuid();
         public Guid Resident { get; } = Guid.NewGuid();
         public Guid SavedFolder { get; } = Guid.NewGuid();
+        public Guid NestedFolder { get; } = Guid.NewGuid();
         public Guid OpenFolder { get; } = Guid.NewGuid();
         public Guid Split { get; } = Guid.NewGuid();
         public JsonNode Session { get; }
@@ -37,10 +39,12 @@ public sealed partial class BrowserContractsTests {
             Session.AsObject().Remove("disposableSeedMarker");
             var space = Session["spaces"]![0]!.AsObject();
             space["id"] = SwiftId(Space);
-            space["tabs"] = new JsonArray(Tab(Pinned, "pinned"), Tab(Saved, "saved", SavedFolder), Tab(Open, "current"),
+            space["tabs"] = new JsonArray(Tab(Pinned, "pinned"), Tab(Saved, "saved", SavedFolder), Tab(Nested, "saved", NestedFolder),
+                Tab(Open, "current"),
                 Tab(Left, "current", split: Split), Tab(Right, "current", split: Split), Tab(Last, "current"),
                 Tab(Filed, "current", OpenFolder));
-            space["folders"] = new JsonArray(Folder(SavedFolder, "saved"), Folder(OpenFolder, "current"));
+            space["folders"] = new JsonArray(Folder(SavedFolder, "saved"), Folder(NestedFolder, "saved", SavedFolder),
+                Folder(OpenFolder, "current"));
             space["splitGroups"] = new JsonArray(new JsonObject { ["id"] = Split.ToString(), ["customTitle"] = "Research" });
             space.Remove("selectedTabID");
             var other = space.DeepClone().AsObject();
@@ -66,10 +70,11 @@ public sealed partial class BrowserContractsTests {
             ["lastActivatedAt"] = 800000000.0
         };
 
-        private static JsonObject Folder(Guid id, string location) => new() {
+        private static JsonObject Folder(Guid id, string location, Guid? parent = null) => new() {
             ["id"] = SwiftId(id),
             ["title"] = "Folder",
-            ["location"] = location
+            ["location"] = location,
+            ["parentID"] = parent is { } parentId ? SwiftId(parentId) : null
         };
     }
 
@@ -101,6 +106,38 @@ public sealed partial class BrowserContractsTests {
                 && Guid.Parse(record["id"]!["value"]!.GetValue<string>()) == id)!;
             Assert.Equal("explicitDelete", record["tombstone"]!["reason"]!.GetValue<string>());
         }
+    }
+
+    [Fact]
+    public void DeletingAFolderWithItsTabsDeletesTheFoldersInsideItAndLeavesTheRest() {
+        var f = new BatchSpace();
+        using var device = new TestDevice(f.Session);
+        var (core, sync) = (device.Authority, Syncing(device.Authority));
+        var window = device.Open(f.Space, (f.Space, f.Nested));
+        var kept = Tabs(core).Except([f.Saved, f.Nested]).ToArray();
+
+        // Command-Delete sends DeleteTabs, which must keep refusing folders.
+        Assert.IsType<SelectionHoldsFolders>(device.Query(new CanSend(
+            new DeleteTabs(device.Workspace, window, f.Space, new([], [f.SavedFolder], [f.Saved, f.Nested])))).Refusal);
+
+        device.Send(new DeleteFolderAndTabs(device.Workspace, window, f.Space, f.SavedFolder, [f.Saved, f.Nested]));
+        var space = core.Current.Spaces[0];
+        Assert.Equal([f.OpenFolder], space.Folders.Select(folder => folder.Id));
+        Assert.Equal(kept, Tabs(core));
+        Assert.Equal([f.Saved, f.Nested], space.ArchivedTabs.Where(entry => entry.Reason == ArchiveReason.Deleted)
+            .Select(entry => entry.Tab.Id));
+        Assert.Equal(f.Open, device.Tab(window, f.Space));
+        var records = JsonNode.Parse(sync.Snapshot.Read())!["records"]!.AsArray();
+        foreach (var (kind, id) in new[] { ("folder", f.SavedFolder), ("folder", f.NestedFolder), ("tab", f.Saved), ("tab", f.Nested) }) {
+            var record = records.Single(record => record!["id"]!["kind"]!.GetValue<string>() == kind
+                && Guid.Parse(record["id"]!["value"]!.GetValue<string>()) == id)!;
+            Assert.Equal("explicitDelete", record["tombstone"]!["reason"]!.GetValue<string>());
+        }
+
+        var empty = device.Open(f.Space, (f.Space, null));
+        Assert.Null(device.Tab(empty, f.Space));
+        device.Send(new DeleteFolderAndTabs(device.Workspace, empty, f.Space, f.OpenFolder, [f.Filed]));
+        Assert.Null(device.Tab(empty, f.Space));
     }
 
     [Fact]

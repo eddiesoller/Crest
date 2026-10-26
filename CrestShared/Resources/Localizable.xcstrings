@@ -5057,6 +5057,9 @@
         }
       }
     },
+    "Delete Tabs" : {
+
+    },
     "Deleted" : {
 
     },
@@ -7624,6 +7627,50 @@
         }
       }
     },
+    "Its %lld tabs and the folders inside it can move up one level or be deleted with it. Deleted tabs go to the Archive." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Its tab and the folders inside it can move up one level or be deleted with it. Deleted tabs go to the Archive."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Its %lld tabs and the folders inside it can move up one level or be deleted with it. Deleted tabs go to the Archive."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Its %lld tabs can move up one level or be deleted with it. Deleted tabs go to the Archive." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Its tab can move up one level or be deleted with it. Deleted tabs go to the Archive."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Its %lld tabs can move up one level or be deleted with it. Deleted tabs go to the Archive."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Its content is still saved. Update Crest to open it." : {
 
     },
@@ -7659,6 +7706,9 @@
       }
     },
     "Keep Pages Loaded" : {
+
+    },
+    "Keep Tabs" : {
 
     },
     "Keep work, personal browsing, and projects in separate Spaces." : {

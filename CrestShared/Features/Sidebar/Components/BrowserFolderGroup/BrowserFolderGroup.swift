@@ -34,6 +34,7 @@ struct BrowserFolderGroup: View {
     @State private var iconRequest: BrowserFolderRuntimeAssignment?
     @State private var colorRequest: BrowserFolderRuntimeAssignment?
     @State private var deletionRequest: BrowserFolderRuntimeAssignment?
+    @State private var deletionCapture: BrowserCapturedSelection?
     #if os(macOS)
         private var collapsedTabVisibility: BrowserCollapsedFolderTabVisibilityState {
             get { collapsedVisibilityOwner.state }
@@ -83,6 +84,8 @@ struct BrowserFolderGroup: View {
             isChoosingIcon: iconPresentation,
             folderSymbol: folderSymbolBinding,
             isConfirmingDeletion: deletionPresentation,
+            deletionTabCount: deletionCapture?.ids.count ?? 0,
+            deletionNestsFolders: (deletionCapture?.folderIDs.count ?? 0) > 1,
             collapsedTabVisibility: Binding(
                 get: { collapsedTabVisibility }, set: { collapsedTabVisibility = $0 }),
             isTitleFocused: $isTitleFocused,
@@ -94,6 +97,7 @@ struct BrowserFolderGroup: View {
             commitTitle: commitTitle,
             cancelTitleEditing: cancelTitleEditing,
             deleteFolder: deleteFolder,
+            deleteFolderAndTabs: deleteFolderAndTabs,
             unloadKeptCollapsedTab: unloadKeptCollapsedTab
         )
     }
@@ -265,8 +269,21 @@ struct BrowserFolderGroup: View {
     private func deleteFolder() {
         guard let request = deletionRequest else { return }
         deletionRequest = nil
+        deletionCapture = nil
         guard isDeferredAssignmentAvailable(request) else { return }
         context.browser.deleteFolder(request.folderID, matching: request.spaceAssignment)
+    }
+
+    private func deleteFolderAndTabs() {
+        guard let request = deletionRequest, let captured = deletionCapture else { return }
+        deletionRequest = nil
+        deletionCapture = nil
+        guard isDeferredAssignmentAvailable(request) else { return }
+        deletionActions.perform(context.browser.deletingFolder(request.folderID, captured), for: captured)
+    }
+
+    private var deletionActions: BrowserTabBatchActions {
+        BrowserTabBatchActions(browser: context.browser, spaceAccess: context.spaceAccess)
     }
 
     private var folderColorBinding: Binding<BrandColor> {
@@ -333,9 +350,16 @@ struct BrowserFolderGroup: View {
             return isDeferredAssignmentAvailable(request)
         } set: { isPresented in
             if isPresented, configuration.isCurrentAndUnlocked {
+                deletionCapture = BrowserSidebarSelection.capture([.folder(folder.id)], in: context.browser)
+                    .flatMap { captured in
+                        !captured.ids.isEmpty
+                            && deletionActions.isAvailable(context.browser.deletingFolder(folder.id, captured))
+                            ? captured : nil
+                    }
                 deletionRequest = configuration.folderRuntimeAssignment
             } else if !isPresented {
                 deletionRequest = nil
+                deletionCapture = nil
             }
         }
     }
@@ -368,6 +392,7 @@ struct BrowserFolderGroup: View {
             !isDeferredAssignmentAvailable(request)
         {
             deletionRequest = nil
+            deletionCapture = nil
         }
     }
 }

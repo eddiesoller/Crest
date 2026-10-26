@@ -24,6 +24,15 @@ extension BrowserStore {
             reselection: .cleared, closesPages: true)
     }
 
+    /// Deletes the folder, the folders inside it and every tab they hold.
+    func deletingFolder(_ folderID: UUID, _ request: BrowserCapturedSelection) -> BrowserTabBatch {
+        BrowserTabBatch(
+            DeleteFolderAndTabs(
+                workspaceID: family.workspaceID, windowID: windowID, spaceID: request.spaceID,
+                folderID: folderID, memberTabIDs: request.ids),
+            reselection: .cleared, closesPages: true)
+    }
+
     /// Copies the selected tabs to the end of the open tabs.
     func duplicating(_ request: BrowserCapturedSelection) -> BrowserTabBatch {
         BrowserTabBatch(

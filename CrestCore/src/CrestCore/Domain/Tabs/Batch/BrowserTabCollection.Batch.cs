@@ -31,6 +31,16 @@ public sealed partial class BrowserTabCollection {
             : next;
     }
 
+    /// Unlike `DeleteSelected`, leaves the window on what it showed unless the
+    /// deletion took it.
+    public Guid? DeleteFolderAndTabs(ResolvedSelection selection, Guid? shown, Guid? fallback, DateTimeOffset now) {
+        RequireWholeSplits(selection);
+        var next = DismissTabs(selection.MemberIds, shown, fallback, now, deleting: true, ensureSelection: false,
+            resetArchivePlacement: true);
+        folders.RemoveAll(folder => selection.Folders.Contains(folder.Id));
+        return next;
+    }
+
     #endregion
 
     #region Actions - Copying

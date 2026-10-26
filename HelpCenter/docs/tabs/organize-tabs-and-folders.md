@@ -35,6 +35,8 @@ Drop along a folder’s top or bottom edge to place a tab beside it, including b
 
 Right-click on Mac or touch and hold on iPhone and iPad. Depending on the item, Crest offers rename, copy link, change icon, pin, save, move to Space, add to Split View, duplicate, unload, Keep Loaded, close, archive, reset saved location, or delete.
 
+Deleting a folder that holds tabs asks what happens to them. **Keep Tabs** moves its tabs and nested folders up one level. **Delete Tabs** deletes them with the folder and puts the tabs in the Archive.
+
 ## Organize several items at once
 
 Select tabs, Split View groups, and folders together to organize them in one step. On Mac, **Command-click** toggles individual items and **Shift-click** selects a range. Use the selected items’ context menu for the available batch actions, or drag the selection to its destination.

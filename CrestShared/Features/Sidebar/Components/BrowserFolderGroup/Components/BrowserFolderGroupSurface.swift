@@ -90,12 +90,31 @@ struct BrowserFolderGroupSurface: View {
             isPresented: interaction.isConfirmingDeletion,
             titleVisibility: .visible
         ) {
-            Button("Delete Folder", role: .destructive) {
-                interaction.deleteFolder()
+            if interaction.deletionTabCount > 0 {
+                Button("Keep Tabs") {
+                    interaction.deleteFolder()
+                }
+                Button("Delete Tabs", role: .destructive) {
+                    interaction.deleteFolderAndTabs()
+                }
+            } else {
+                Button("Delete Folder", role: .destructive) {
+                    interaction.deleteFolder()
+                }
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Its tabs stay in this section, and any nested folders move up one level.")
+            if interaction.deletionTabCount > 0, interaction.deletionNestsFolders {
+                Text(
+                    "Its \(interaction.deletionTabCount) tabs and the folders inside it can move up one level or be deleted with it. Deleted tabs go to the Archive."
+                )
+            } else if interaction.deletionTabCount > 0 {
+                Text(
+                    "Its \(interaction.deletionTabCount) tabs can move up one level or be deleted with it. Deleted tabs go to the Archive."
+                )
+            } else {
+                Text("Its tabs stay in this section, and any nested folders move up one level.")
+            }
         }
         .animation(
             CrestMotion.collection.unlessReducingMotion(reduceMotion),

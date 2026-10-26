@@ -11,6 +11,8 @@ struct BrowserFolderGroupInteractionContext {
     let isChoosingIcon: Binding<Bool>
     let folderSymbol: Binding<String>
     let isConfirmingDeletion: Binding<Bool>
+    let deletionTabCount: Int
+    let deletionNestsFolders: Bool
     let collapsedTabVisibility: Binding<BrowserCollapsedFolderTabVisibilityState>
     let isTitleFocused: FocusState<Bool>.Binding
     let folderColor: Binding<BrandColor>
@@ -21,5 +23,6 @@ struct BrowserFolderGroupInteractionContext {
     let commitTitle: () -> Void
     let cancelTitleEditing: () -> Void
     let deleteFolder: () -> Void
+    let deleteFolderAndTabs: () -> Void
     let unloadKeptCollapsedTab: (UUID) -> Void
 }
