@@ -12,6 +12,8 @@ struct BrowserSidebarTabLabelContent: View {
     var leadingInset: CGFloat = 0
     var restoreSavedLocation: (() -> Void)?
     var faviconPrimaryClick: (() -> Void)?
+    var hostsFaviconReturn = false
+    var faviconReturnIsSuppressed = false
     var titleOpacity = 1.0
     var iconOffset: CGFloat = 0
     @Environment(\.browserInteractionCapabilities) private var capabilities
@@ -30,17 +32,14 @@ struct BrowserSidebarTabLabelContent: View {
                 .opacity(titleOpacity)
         } icon: {
             HStack(spacing: 3) {
-                BrowserSidebarTabFaviconContent(
-                    tab: tab, favicons: favicons, profileID: profileID, metrics: metrics,
-                    isProminent: isSelected, isLoaded: isLoaded,
-                    iconScale: textScale
-                )
-                #if os(macOS)
-                    .simultaneousGesture(
-                        TapGesture().onEnded { faviconPrimaryClick?() },
-                        including: faviconPrimaryClick == nil ? .none : .all
-                    )
-                #endif
+                if hostsFaviconReturn {
+                    favicon.modifier(
+                        BrowserSidebarTabFaviconReturnTarget(
+                            restore: faviconPrimaryClick, isSuppressed: faviconReturnIsSuppressed,
+                            scale: BrowserSidebarDensity(textScale).scale))
+                } else {
+                    favicon
+                }
                 if tab.placement == .saved, tab.isAwayFromSavedAddress, let restoreSavedLocation {
                     BrowserTabSavedLocationIndicator(restore: restoreSavedLocation)
                         .browserTabResidency(isLoaded: isLoaded)
@@ -51,5 +50,13 @@ struct BrowserSidebarTabLabelContent: View {
         .padding(.leading, leadingInset)
         .frame(maxWidth: .infinity, maxHeight: metrics.fillsRowHeight ? .infinity : nil, alignment: .leading)
         .contentShape(.rect)
+    }
+
+    private var favicon: some View {
+        BrowserSidebarTabFaviconContent(
+            tab: tab, favicons: favicons, profileID: profileID, metrics: metrics,
+            isProminent: isSelected, isLoaded: isLoaded,
+            iconScale: textScale
+        )
     }
 }

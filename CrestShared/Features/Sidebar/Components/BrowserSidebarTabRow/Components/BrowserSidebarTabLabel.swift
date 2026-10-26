@@ -12,6 +12,8 @@ struct BrowserSidebarTabLabel: View {
     var leadingInset: CGFloat = 0
     var restoreSavedLocation: (() -> Void)?
     var faviconPrimaryClick: (() -> Void)?
+    var hostsFaviconReturn = false
+    var faviconReturnIsSuppressed = false
     var titleOpacity = 1.0
     var iconOffset: CGFloat = 0
     private var textScale: Double { BrowserDeviceAppearanceStore.shared.tabScale }
@@ -20,7 +22,8 @@ struct BrowserSidebarTabLabel: View {
         BrowserSidebarTabLabelContent(
             tab: tab, favicons: favicons, profileID: profileID, isSelected: isSelected, isLoaded: isLoaded,
             metrics: metrics, leadingInset: leadingInset, restoreSavedLocation: restoreSavedLocation,
-            faviconPrimaryClick: faviconPrimaryClick,
+            faviconPrimaryClick: faviconPrimaryClick, hostsFaviconReturn: hostsFaviconReturn,
+            faviconReturnIsSuppressed: faviconReturnIsSuppressed,
             titleOpacity: titleOpacity, iconOffset: iconOffset, textScale: textScale
         )
     }

@@ -27,7 +27,8 @@ struct BrowserSidebarTabActivationButton: View {
             BrowserSidebarTabLabel(
                 tab: tab, favicons: favicons, profileID: profileID, isSelected: isSelected,
                 isLoaded: isLoaded, metrics: metrics, leadingInset: leadingInset,
-                restoreSavedLocation: restoreSavedLocation, faviconPrimaryClick: faviconPrimaryClick)
+                restoreSavedLocation: restoreSavedLocation, faviconPrimaryClick: faviconPrimaryClick,
+                hostsFaviconReturn: hostsFaviconReturn, faviconReturnIsSuppressed: faviconReturnIsSuppressed)
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: maxHeight)
@@ -67,11 +68,23 @@ struct BrowserSidebarTabActivationButton: View {
         #endif
     }
 
+    /// Independent of the saved URL, so navigating never rebuilds the favicon.
+    private var hostsFaviconReturn: Bool {
+        #if os(macOS)
+            BrowserAppPreferenceStore.shared.returnsToSavedURLOnFaviconClick && tab.placement == .saved
+        #else
+            false
+        #endif
+    }
+
+    /// Checks the click first, so only rows that can light observe a drag.
+    private var faviconReturnIsSuppressed: Bool {
+        faviconPrimaryClick != nil && sidebarInteraction.sidebarReorderState.suppressesActivation
+    }
+
     private var faviconPrimaryClick: (() -> Void)? {
         #if os(macOS)
-            guard BrowserAppPreferenceStore.shared.returnsToSavedURLOnFaviconClick,
-                tab.placement == .saved, tab.isAwayFromSavedAddress,
-                let restoreSavedLocation
+            guard hostsFaviconReturn, tab.isAwayFromSavedAddress, let restoreSavedLocation
             else { return nil }
             return {
                 guard !sidebarInteraction.sidebarReorderState.suppressesActivation else { return }

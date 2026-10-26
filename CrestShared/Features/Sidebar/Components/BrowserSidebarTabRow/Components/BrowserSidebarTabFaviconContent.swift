@@ -13,6 +13,7 @@ struct BrowserSidebarTabFaviconContent: View {
     let iconScale: Double
 
     @Environment(\.tabFaviconIsReplaced) private var isReplaced
+    @Environment(\.sidebarTabFaviconReturn) private var returnTarget
 
     var body: some View {
         TabStateFaviconView(
@@ -21,6 +22,25 @@ struct BrowserSidebarTabFaviconContent: View {
         )
         .opacity(isReplaced ? 0 : 1)
         .browserTabResidency(isLoaded: isLoaded)
+        // Beneath the engine badge, so the badge keeps its own tooltip.
+        .background {
+            if returnTarget.isTarget {
+                Color.clear
+                    .crestInteractiveSurface(
+                        isSelected: false, isHovering: returnTarget.isLit, cornerRadius: CrestRadius.compact
+                    )
+                    .padding(-returnTarget.inset)
+            }
+        }
+        .overlay {
+            if returnTarget.isTarget {
+                Color.clear
+                    .contentShape(.rect)
+                    .help("Return to Saved URL")
+                    .accessibilityHidden(true)
+                    .padding(-returnTarget.inset)
+            }
+        }
         .overlay(alignment: .bottomTrailing) {
             TabEngineBadge(tabID: tab.id, scale: BrowserSidebarDensity(iconScale).scale)
         }
