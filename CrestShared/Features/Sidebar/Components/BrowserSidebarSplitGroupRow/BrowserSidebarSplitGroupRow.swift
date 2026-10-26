@@ -82,6 +82,7 @@ struct BrowserSidebarSplitGroupRow: View {
             tint: tintBinding,
             activate: activate,
             closeSplit: closeSplit,
+            deleteSplit: deleteSplit,
             beginRenaming: beginRenaming,
             beginChangingIcon: beginChangingIcon,
             beginChangingTint: beginChangingTint,
@@ -116,6 +117,17 @@ struct BrowserSidebarSplitGroupRow: View {
                 matching: configuration.assignment
             )
         }
+    }
+
+    /// A saved split has no close of its own; deleting takes every member at
+    /// once, as one deletion the core can refuse whole.
+    private func deleteSplit() {
+        guard !configuration.canClose, configuration.isCurrentAndUnlocked,
+            let request = BrowserSidebarSelection.capture(
+                configuration.members.map { .tab($0.id) }, in: configuration.browser)
+        else { return }
+        BrowserTabBatchActions(browser: configuration.browser, spaceAccess: configuration.spaceAccess)
+            .perform(configuration.browser.deleting(request), for: request)
     }
 
     private func beginRenaming() {

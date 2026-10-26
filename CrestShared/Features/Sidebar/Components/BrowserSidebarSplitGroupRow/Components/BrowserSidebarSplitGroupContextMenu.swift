@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// The menu for the group as a whole: the two ways a split ends.
+/// The menu for the group as a whole: separating its tabs, and closing an
+/// open split or deleting a saved one.
 ///
 /// Everything that belongs to one pane rather than to the run — moving a member
 /// along the carousel, taking it out of the split, and every ordinary tab
@@ -48,11 +49,16 @@ struct BrowserSidebarSplitGroupContextMenu: View {
                 }
                 .disabled(!configuration.isAvailableForDisplay)
 
-                if configuration.canClose {
-                    Divider()
+                Divider()
 
+                if configuration.canClose {
                     Button("Close Split", systemImage: "xmark", role: .destructive) {
                         interaction.closeSplit()
+                    }
+                    .disabled(!configuration.isAvailableForDisplay)
+                } else {
+                    Button("Delete Split", systemImage: "trash", role: .destructive) {
+                        interaction.deleteSplit()
                     }
                     .disabled(!configuration.isAvailableForDisplay)
                 }

@@ -5047,6 +5047,9 @@
         }
       }
     },
+    "Delete Split" : {
+
+    },
     "Delete Tab" : {
       "localizations" : {
         "ar" : {

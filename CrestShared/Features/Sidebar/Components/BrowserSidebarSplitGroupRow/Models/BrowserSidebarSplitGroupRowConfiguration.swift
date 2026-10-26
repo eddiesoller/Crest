@@ -157,6 +157,7 @@ struct BrowserSidebarSplitGroupRowInteractionContext {
     let tint: Binding<BrandColor>
     let activate: () -> Void
     let closeSplit: @MainActor () -> Void
+    let deleteSplit: @MainActor () -> Void
     let beginRenaming: () -> Void
     let beginChangingIcon: () -> Void
     let beginChangingTint: () -> Void

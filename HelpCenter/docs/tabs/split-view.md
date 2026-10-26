@@ -34,7 +34,7 @@ In the sidebar, drag the split's header to move the whole group. Drag an individ
 
 ## Remove or separate tabs
 
-**Remove Tab From Split** takes the focused tab out of the group. **Separate All Tabs** turns every card back into an independent tab; its default shortcut is **Option-Command-U**. Closing the focused card closes that tab while the remaining group survives.
+**Remove Tab From Split** takes the focused tab out of the group. **Separate All Tabs** turns every card back into an independent tab; its default shortcut is **Option-Command-U**. Closing the focused card closes that tab while the remaining group survives. To end the whole group, choose **Close Split** from the split header's menu, or **Delete Split** when the split is in Saved Tabs.
 
 ## iPad and iPhone
 
