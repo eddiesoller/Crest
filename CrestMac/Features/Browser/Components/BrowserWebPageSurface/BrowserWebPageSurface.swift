@@ -133,6 +133,7 @@ struct BrowserWebPageSurface: View {
             matches: { page.findMatches },
             focusRequest: { page.findFocusRequest },
             focusesQueryField: { page.findFocusesQueryField },
+            querySelectionRequest: { page.findQuerySelectionRequest },
             dismiss: page.dismissFind
         )
     }

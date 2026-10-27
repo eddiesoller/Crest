@@ -29,6 +29,9 @@ protocol BrowserPageEngineAdapter: EngineHostedPage {
     /// The page's main document as whole-page translation rewrites it, or
     /// nil for an engine that does not translate whole pages.
     var translationDocument: BrowserTranslationDocument? { get }
+    /// The page's selection for find, or nil unless the page's own content
+    /// has keyboard focus (not Crest's chrome or the engine's inspector).
+    var findSelection: BrowserFindSelection? { get }
 
     /// Builds the page's Media Session coordinator: over Crest's bridge in the
     /// page, or over an engine that reports the session itself.

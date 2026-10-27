@@ -81,6 +81,11 @@ final class BrowserWebKitPageAdapter: BrowserPageEngineAdapter {
         BrowserCredentialSession.evaluator(in: webView)
     }
     var translationDocument: BrowserTranslationDocument? { BrowserTranslationDocument(webView: webView) }
+    var findSelection: BrowserFindSelection? {
+        guard let responder = webView.window?.firstResponder as? NSView, responder.isDescendant(of: webView)
+        else { return nil }
+        return BrowserFindSelection(webView: webView)
+    }
 
     // MARK: - Initializers
 

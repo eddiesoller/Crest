@@ -41,6 +41,9 @@ struct BrowserFindPort {
     /// back by finding again leaves the keys with the page.
     var focusesQueryField: () -> Bool = { true }
 
+    /// Bumped when the query came from the page's selection, to select it whole.
+    var querySelectionRequest: () -> Int = { 0 }
+
     /// Closes the bar and clears the page's highlight.
     let dismiss: () -> Void
 }

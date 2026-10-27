@@ -23,12 +23,15 @@ enum BrowserFindBarField: Hashable {
 /// second `⌘F` left the field alone, and after the move it stopped landing on
 /// the first one too.
 struct BrowserFindBar: View {
+    // MARK: - Variables
+
     let port: BrowserFindPort
     let capabilities: BrowserInteractionCapabilities
     let isPageActive: Bool
 
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @FocusState private var focusedField: BrowserFindBarField?
+    @State private var querySelection: TextSelection?
 
     var body: some View {
         HStack(spacing: metrics.itemSpacing) {
@@ -93,8 +96,10 @@ struct BrowserFindBar: View {
         .accessibilityIdentifier("find-bar")
     }
 
+    // MARK: - Actions - Query
+
     private var queryField: some View {
-        TextField("Find in Page", text: queryBinding)
+        TextField("Find in Page", text: queryBinding, selection: $querySelection)
             .textFieldStyle(.plain)
             #if os(iOS)
                 // The query stays literal, and the return key reads as search.
@@ -117,7 +122,21 @@ struct BrowserFindBar: View {
                 port.find(port.query(), .backward)
                 return .handled
             }
+            .onChange(of: port.querySelectionRequest(), initial: true) {
+                guard port.focusesQueryField() else { return }
+                querySelection = nil
+                selectQueryOnceShown(port.query())
+            }
             .accessibilityIdentifier("find-field")
+    }
+
+    /// The field shows the new query a pass later; skipped if the person typed first.
+    private func selectQueryOnceShown(_ seeded: String) {
+        Task { @MainActor in
+            await Task.yield()
+            guard !seeded.isEmpty, port.query() == seeded else { return }
+            querySelection = TextSelection(range: seeded.startIndex..<seeded.endIndex)
+        }
     }
 
     /// One of the bar's three glyph controls, claiming a hit target only where

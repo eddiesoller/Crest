@@ -36,6 +36,9 @@
         /// Translation runs through the engine's content scripting, in the
         /// page's main document.
         var translationDocument: BrowserTranslationDocument? { BrowserTranslationDocument(mainFrameOf: native) }
+        var findSelection: BrowserFindSelection? {
+            native.surface.pageHoldsKeyboardFocus ? BrowserFindSelection(mainFrameOf: native) : nil
+        }
 
         // MARK: - Initializers
 

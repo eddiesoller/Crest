@@ -1,8 +1,21 @@
 import Observation
 
+// MARK: - Types
+
+/// Asks the page for its selected text, or nil. Where the engine clears the
+/// selection on losing focus, as WebKit does, the ask must be sent at once.
+typealias BrowserFindSelectionRead = @MainActor (_ answer: @escaping @MainActor (String?) -> Void) -> Void
+
 @Observable
 @MainActor
 final class BrowserFindSession {
+    // MARK: - Static Variables
+
+    /// A page slower than this opens the bar as if nothing were selected.
+    private static let selectionDeadline: Duration = .seconds(1)
+
+    // MARK: - Variables
+
     private(set) var isPresented: Bool {
         get { observed(\.isPresentedStorage, as: \.isPresented) }
         set { publish(newValue, into: \.isPresentedStorage, as: \.isPresented) }
@@ -23,6 +36,9 @@ final class BrowserFindSession {
     /// observes changes and the field stays wherever focus went. This counter
     /// changes on every ask, which is what the bar takes focus from.
     private(set) var focusRequest = 0
+
+    /// Bumped when the query came from the page's selection.
+    private(set) var querySelectionRequest = 0
 
     /// Whether the bar should take the query field when it appears. Finding
     /// again brings a closed bar back to show where the match went, without
@@ -45,12 +61,38 @@ final class BrowserFindSession {
         isPresented ? query : lastQuery
     }
 
+    // MARK: - Actions - Presentation
+
     func present(hasLoadedPage: Bool) {
         guard hasLoadedPage else { return }
         isPresented = true
         focusesQueryField = true
         focusRequest &+= 1
     }
+
+    /// Presents the bar and, only as it opens, starts it from the page's
+    /// selection, unless that arrives late or after the person typed or closed
+    /// the bar.
+    func present(
+        hasLoadedPage: Bool,
+        seedingFrom readSelection: BrowserFindSelectionRead?,
+        using executor: any BrowserFindExecuting
+    ) {
+        let isOpening = !isPresented
+        present(hasLoadedPage: hasLoadedPage)
+        guard isOpening, isPresented, let readSelection else { return }
+        let requestGeneration = generation
+        let start = ContinuousClock.now
+        readSelection { [weak self] selection in
+            guard let self, let selection, generation == requestGeneration,
+                ContinuousClock.now - start <= Self.selectionDeadline
+            else { return }
+            find(selection, using: executor)
+            querySelectionRequest &+= 1
+        }
+    }
+
+    // MARK: - Actions - Find
 
     /// Moves to the next or previous match for the query there is to find
     /// again, bringing the bar back without its field's focus when it closed.

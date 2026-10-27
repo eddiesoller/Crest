@@ -423,6 +423,11 @@
         private var engineView: NSView? {
             subviews.first { $0 !== devToolsView }
         }
+        /// Whether the engine's page view, not docked DevTools, has keyboard focus.
+        var pageHoldsKeyboardFocus: Bool {
+            guard let engineView, let responder = window?.firstResponder as? NSView else { return false }
+            return responder.isDescendant(of: engineView)
+        }
         override func layout() {
             super.layout()
             layoutEngineView()

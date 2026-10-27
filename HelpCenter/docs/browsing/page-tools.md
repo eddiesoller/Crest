@@ -26,7 +26,7 @@ Downloaded language packs are shared with other apps and remain on the device af
 ## Read and search
 
 - **Reader** converts a supported article into a focused reading surface. Use the page controls, menu, command palette, or assign a shortcut. Reader works on WebKit pages. On Mac, open a Chromium page in WebKit to read it in Reader.
-- **Find in Page** uses **Command-F**. Step through matches and close Find when finished. On a Chromium page, Find shows how many matches there are and which one is selected; on a WebKit page, it shows whether there is a match.
+- **Find in Page** uses **Command-F**. On Mac, Find starts with the text you've selected on the page. Step through matches and close Find when finished. On a Chromium page, Find shows how many matches there are and which one is selected; on a WebKit page, it shows whether there is a match.
 - **Zoom In**, **Zoom Out**, and **Actual Size** use **Command-+**, **Command--**, and **Command-0**.
 
 Set a default zoom for pages in **Settings → Appearance**, from **50% to 300%**.
