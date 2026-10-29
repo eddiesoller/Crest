@@ -17626,6 +17626,7 @@ struct ShortcutCommand: Hashable, Sendable {
         case mostRecentTabBackward
         case clearSiteCookies
         case clearSiteCache
+        case captureFullPage
     }
 
     let tag: Int
@@ -19601,6 +19602,23 @@ struct ShortcutCommand: Hashable, Sendable {
         offersInPalette: true,
         isReservedFromPages: false
     )
+    static let captureFullPage = ShortcutCommand(
+        tag: 74,
+        kind: .captureFullPage,
+        name: "captureFullPage",
+        section: ShortcutSection.page,
+        title: LocalizedStringResource("Capture Full Page"),
+        searchTerms: LocalizedStringResource("screenshot entire whole page scrolling long image clipboard copy"),
+        menuTitle: nil,
+        symbol: "doc.on.clipboard",
+        requiredCapability: EngineCapability.fullPageCapture,
+        selects: nil,
+        number: nil,
+        defaultShortcuts: [],
+        paletteRest: nil,
+        offersInPalette: true,
+        isReservedFromPages: false
+    )
 
     static let all: [ShortcutCommand] = [
         newWindow,
@@ -19676,7 +19694,8 @@ struct ShortcutCommand: Hashable, Sendable {
         capturePage,
         mostRecentTabBackward,
         clearSiteCookies,
-        clearSiteCache
+        clearSiteCache,
+        captureFullPage
     ]
 
     static func named(_ name: String?) -> ShortcutCommand? {
@@ -19868,7 +19887,8 @@ struct ShortcutMenu: Hashable, Sendable {
                 ShortcutCommand.sharePage,
                 ShortcutCommand.exportPDF,
                 ShortcutCommand.saveWebArchive,
-                ShortcutCommand.capturePage
+                ShortcutCommand.capturePage,
+                ShortcutCommand.captureFullPage
             ],
             [ShortcutCommand.clearSiteCookies, ShortcutCommand.clearSiteCache]
         ]

@@ -2983,6 +2983,9 @@
     "Capture" : {
 
     },
+    "Capture Full Page" : {
+
+    },
     "Capture in Portrait Mode" : {
 
     },
@@ -11617,6 +11620,9 @@
       }
     },
     "Screen Sharing" : {
+
+    },
+    "screenshot entire whole page scrolling long image clipboard copy" : {
 
     },
     "screenshot snapshot region selection image clipboard" : {

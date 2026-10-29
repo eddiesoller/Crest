@@ -46,6 +46,7 @@ Use the sidebar’s Now Playing controls for eligible active media. On Mac, supp
 - **Print Page** uses **Command-P**.
 - **Export as PDF** writes a portable rendered document.
 - **Save Web Archive** saves the whole page in one file. A Chromium page saves an `.mhtml` file, and a WebKit page saves a `.webarchive` file.
+- On Mac, **Capture Full Page** copies the whole page as an image.
 
 **File → Open File…** offers the archive format of the focused page's engine. Chromium cannot open a `.webarchive`, and WebKit cannot open an `.mhtml` file.
 

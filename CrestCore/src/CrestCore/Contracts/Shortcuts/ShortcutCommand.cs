@@ -78,7 +78,8 @@ public sealed class ShortcutCommand {
         CapturePage,
         MostRecentTabBackward,
         ClearSiteCookies,
-        ClearSiteCache
+        ClearSiteCache,
+        CaptureFullPage
     }
 
     #endregion
@@ -294,6 +295,10 @@ public sealed class ShortcutCommand {
     public static readonly ShortcutCommand ClearSiteCache = new(Kinds.ClearSiteCache, name: "clearSiteCache",
         ShortcutSection.Page, title: "Clear Cache for This Site", symbol: "trash",
         searchTerms: "cached images files empty delete remove", availableWhen: ShowingWebPage);
+    public static readonly ShortcutCommand CaptureFullPage = new(Kinds.CaptureFullPage, name: "captureFullPage",
+        ShortcutSection.Page, title: "Capture Full Page", symbol: "doc.on.clipboard",
+        searchTerms: "screenshot entire whole page scrolling long image clipboard copy",
+        requiredCapability: EngineCapability.FullPageCapture, availableWhen: ShowingWebPage);
 
     public static IReadOnlyList<ShortcutCommand> All { get; } = [
         NewWindow, NewBlankWindow, NewTab, NewQuickWindow, NewPrivateWindow, CloseTabOrWindow, CloseWindow, OpenLocation, Back,
@@ -305,7 +310,7 @@ public sealed class ShortcutCommand {
         ExportPDF, SaveWebArchive, PrintPage, ToggleSidebar, ShowHistory, ShowArchive, ShowDownloads, ShowWebInspector,
         SplitWithNextTab, FocusNextSplitCard, FocusPreviousSplitCard, RemoveTabFromSplit, SeparateSplitTabs,
         MoveSplitCardLeft, MoveSplitCardRight, ToggleDeveloperToolbar, ToggleTranslationToolbar, OpenFile, FindNext,
-        FindPrevious, CapturePage, MostRecentTabBackward, ClearSiteCookies, ClearSiteCache
+        FindPrevious, CapturePage, MostRecentTabBackward, ClearSiteCookies, ClearSiteCache, CaptureFullPage
     ];
 
     public Kinds Kind { get; }
